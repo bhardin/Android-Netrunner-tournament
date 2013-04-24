@@ -12,12 +12,14 @@ class Tournament
 			@players = [] 
 		end
 		@rounds = []
+		@status = "not_started"
 	end
 
 	def start
 		if number_of_players.odd?
 			@players << Player.new("BYE")
 		end
+		@status = "running"
 	end
 
 	def number_of_matches
@@ -40,19 +42,19 @@ class Tournament
 	end
 
 	def create_matches
-		randomize_players
+		sort_players
 		new_round = []
-		i = 0
+		x=0
 
 		number_of_matches.times do
-			first_player = @players[i]
-			second_player = @players[i+1]
+			first_player = @players[x]
+			second_player = @players[x+1]
+			x += 2
 
-			if already_played?(first_player, second_player)
-				
-			end
+			#if already_played?(first_player, second_player)
+					
+			#end
 			new_round << Match.new(first_player, second_player)
-			i += 2
 		end
 
 		@rounds << new_round
@@ -69,10 +71,12 @@ class Tournament
 	end
 
 	private
-	def randomize_players
-
+	def sort_players
+		if @rounds.empty?
+			@players.shuffle
+		else
+			@players.sort { |x,y| y.prestige_points <=> x.prestige_points }
+		end
 	end
-
-
 
 end

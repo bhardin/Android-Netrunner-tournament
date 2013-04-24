@@ -1,7 +1,7 @@
 class Player
-	attr_reader :name
+	attr_accessor :name, :prestige_points
 
-	def initialize(name)
+	def initialize(name=nil)
 		@name = name
 	end
 end
