@@ -35,13 +35,13 @@ class Tournament
 	end
 
 	def round(number=nil)
-		raise "NoPlayers" if @players.empty?
-		raise "NoRounds" if @rounds.empty?
+		raise "NotStarted" if @status == "not_started"
 		@rounds[number] if number
 		@rounds.last
 	end
 
 	def create_matches
+		raise "NotStarted" if @status == "not_started"
 		sort_players
 		new_round = []
 		x=0
