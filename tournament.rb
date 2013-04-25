@@ -3,7 +3,7 @@ require './match'
 require './round'
 
 class Tournament
-	attr_reader :players, :rounds
+	attr_reader :players, :rounds, :status
 
 	def initialize(players=nil)
 		if players
@@ -12,14 +12,15 @@ class Tournament
 			@players = [] 
 		end
 		@rounds = []
-		@status = "not_started"
+		@status = :not_started
 	end
 
 	def start
 		if number_of_players.odd?
 			@players << Player.new("BYE")
 		end
-		@status = "running"
+		@status = :running
+		seed_first_round
 	end
 
 	def number_of_matches
@@ -35,14 +36,29 @@ class Tournament
 	end
 
 	def round(number=nil)
-		raise "NotStarted" if @status == "not_started"
+		raise "NotStarted" if @status == :not_started
 		@rounds[number] if number
 		@rounds.last
 	end
 
+	def seed_first_round
+		@players.shuffle
+		create_matches
+	end
+
+	def seed_next_round
+		sort_by_prestige(@players) #add a class?
+		create_matches
+	end
+
+	def sort_by_prestige
+		@players.sort { |x,y| y.prestige_points <=> x.prestige_points }
+	end
+
+
 	def create_matches
 		raise "NotStarted" if @status == "not_started"
-		sort_players
+		
 		new_round = []
 		x=0
 

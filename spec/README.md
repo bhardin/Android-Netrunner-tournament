@@ -9,11 +9,13 @@ Netrunner Tournament is a Ruby project.
     bundle install
 
 TODO:
-* Create Players -- DONE
-* Create Tournament -- DONE
+* Player Model -- DONE
+* Tournament Model -- DONE
+* Matches Model -- DONE
 * Assign Players to Tournament - DONE
 * Generate Initial Parings - DONE
 * Generate following round pairings
 * Use tiebreakers and seed following rounds
 * Don't let the same players play each other
 * Determine the optimal number of rounds to have a winner
+* Create Front-End Interface
