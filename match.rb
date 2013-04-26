@@ -44,9 +44,11 @@ class Match
 		elsif :game_two
 			@status = :finished
 			calculate_prestige
+			record_prestige
 		end
 	end
 
+	private
 	def calculate_prestige
 		player_one_total = 0
 		player_two_total = 0
@@ -77,4 +79,10 @@ class Match
 			@player_two_prestige += 1
 		end
 	end
+
+	def record_prestige
+		player_one.prestige_points = player_one_prestige
+		player_two.prestige_points = player_two_prestige
+	end
+
 end

@@ -20,13 +20,21 @@ class Tournament
 			@players << Player.new("BYE")
 		end
 		@status = :running
-		seed_first_round
+		@rounds << seed_round
+	end
+
+	def finalize_round
+		@rounds << seed_round
 	end
 
 	def number_of_matches
 		return @number_of_matches if @number_of_matches
 
 		@number_of_matches = (number_of_players.to_f / 2).ceil
+	end
+
+	def number_of_rounds
+		"undefined"
 	end
 
 	def number_of_players
@@ -38,28 +46,13 @@ class Tournament
 	def round(number=nil)
 		raise "NotStarted" if @status == :not_started
 		@rounds[number] if number
-		@rounds.last
+		@rounds[0]
 	end
-
-	def seed_first_round
-		@players.shuffle
-		create_matches
-	end
-
-	def seed_next_round
-		sort_by_prestige(@players) #add a class?
-		create_matches
-	end
-
-	def sort_by_prestige
-		@players.sort { |x,y| y.prestige_points <=> x.prestige_points }
-	end
-
 
 	def create_matches
-		raise "NotStarted" if @status == "not_started"
+		raise "NotStarted" if @status == :not_started
 		
-		new_round = []
+		new_round = Round.new(number_of_matches)
 		x=0
 
 		number_of_matches.times do
@@ -70,10 +63,11 @@ class Tournament
 			#if already_played?(first_player, second_player)
 					
 			#end
-			new_round << Match.new(first_player, second_player)
+			#new_round.add_match(Match.new(first_player, second_player))
+			new_round.add_match(Match.new(first_player, second_player))
 		end
 
-		@rounds << new_round
+		return new_round		
 	end
 
 	def already_played?(player1, player2)
@@ -87,11 +81,16 @@ class Tournament
 	end
 
 	private
+	def seed_round
+		sort_players
+		return create_matches
+	end
+
 	def sort_players
 		if @rounds.empty?
-			@players.shuffle
+			@players.shuffle!
 		else
-			@players.sort { |x,y| y.prestige_points <=> x.prestige_points }
+			@players.sort! { |x,y| y.prestige_points <=> x.prestige_points }
 		end
 	end
 

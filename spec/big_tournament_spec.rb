@@ -36,9 +36,40 @@ describe "Big Tournament" do
 			@tournament.status.should  be(:running)
 		end
 
-		it "assigs players to matches" do
-			puts @tournament.players.inspect
+		it "creates the first round" do
+			@tournament.rounds.length.should be(1)
+		end
+
+		describe "the first round" do
+			it "has the right number of matches" do
+				@tournament.round.matches.length.should be(@tournament.number_of_matches)
+			end
 		end
 	end
 
+	describe "after the first round" do
+		before do
+			@tournament.start
+			score_round(@tournament.round)
+		end
+
+		describe "when starting the next round" do
+			it "seeds players according to prestige" do
+				@tournament.finalize_round
+				# @tournament.players.should == @tournament.players.sort { |x,y| y.prestige_points <=> x.prestige_points }
+			end
+		end
+	end
+end
+
+def score_round(round)
+	round.matches.each do | match |
+		first_player_score_game_one = rand(0..6)
+		second_player_score_game_one = 10
+		first_player_score_game_two = rand(0..6)
+		second_player_score_game_two = rand(0..6)
+
+		match.score_game(first_player_score_game_one, second_player_score_game_one)
+		match.score_game(first_player_score_game_two, second_player_score_game_two)
+	end
 end

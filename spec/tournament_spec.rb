@@ -61,8 +61,8 @@ describe Tournament do
 
 	describe ".create_matches" do
 		before :each do
-			players = [player1, player2, player3, player4]
-			@tournament = Tournament.new(players)
+			@players = [player1, player2, player3, player4]
+			@tournament = Tournament.new(@players)
 		end
 
 		context "when called before tournament is started" do
@@ -78,11 +78,6 @@ describe Tournament do
 
 			it "matches up players" do
 				@tournament.create_matches
-				@tournament.round(0).length.should be(2)
-			end
-
-			it "creates one round" do
-				@tournament.create_matches
 				@tournament.rounds.length.should be(1)
 			end
 
@@ -91,20 +86,21 @@ describe Tournament do
 				match2 = Match.new(player3, player4)
 				round = [match1, match2]
 				@tournament.rounds << round
+				match1.score_game(10, 1)
+				match1.score_game(10, 1)
+				match2.score_game(10, 1)
+				match2.score_game(10, 1)
+				@tournament.stub(:seed_round).and_return(@players)
+				@tournament.finalize_round
+				
+				#puts round.inspect
+				#puts "-----------"
+				#puts round.inspect
 
-				@tournament.create_matches
-				@tournament.rounds.each do | round |
-					round.each do | match |
-						#puts "#{match.player1.name} and #{match.player2.name}"
-					end
-				end
+				@tournament.round.should_not be(round)
+
 			end
 		end
-
-		
-
-		
-
 	end
 
 end
