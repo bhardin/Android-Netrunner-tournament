@@ -56,6 +56,7 @@ describe "Big Tournament" do
 		describe "when starting the next round" do
 			it "seeds players according to prestige" do
 				@tournament.finalize_round
+				#puts @tournament.players[0].opponents
 				# @tournament.players.should == @tournament.players.sort { |x,y| y.prestige_points <=> x.prestige_points }
 			end
 		end

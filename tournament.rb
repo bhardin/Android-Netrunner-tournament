@@ -15,6 +15,10 @@ class Tournament
 		@status = :not_started
 	end
 
+	def add_player(player)
+		@players << player
+	end
+
 	def start
 		if number_of_players.odd?
 			@players << Player.new("BYE")
@@ -53,18 +57,22 @@ class Tournament
 		raise "NotStarted" if @status == :not_started
 		
 		new_round = Round.new(number_of_matches)
-		x=0
+		player_list = Array.new(@players)
 
-		number_of_matches.times do
-			first_player = @players[x]
-			second_player = @players[x+1]
-			x += 2
+		while not player_list.empty?
+			first_player = player_list.fetch(0)
+			i = 1
+			second_player = player_list.fetch(i)
 
-			#if already_played?(first_player, second_player)
-					
-			#end
-			#new_round.add_match(Match.new(first_player, second_player))
-			new_round.add_match(Match.new(first_player, second_player))
+			while first_player.played?(second_player) 
+				i += 1
+				second_player = player_list.fetch(i)
+			end
+			
+			new_round.add_match(Match.new(@players[@players.index(first_player)], @players[@players.index(second_player)]))
+			
+			player_list.delete(first_player)
+			player_list.delete(second_player)
 		end
 
 		return new_round		

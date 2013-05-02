@@ -11,6 +11,8 @@ class Match
 		@player_two_prestige = 0
 		@score = []
 		@status = :game_one
+		@player_one.add_opponent(@player_two)
+		@player_two.add_opponent(@player_one)
 	end
 
 	def score_game(player1score, player2score)
