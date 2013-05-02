@@ -1,26 +1,25 @@
 require 'sinatra'
 
 get '/' do
-	$tournament = Tournament.new
-	"<h1>Tournament Runner</h1>"
+	erb :index
 end
 
 post '/add_player' do
 	if params[:name]
 		player = Player.new(params[:name])
-		$tournament.add_player(player)
 		redirect "/players"
 	end
 end
 
 get '/players' do
-	$tournament.players
+	@players = Players.all
+	erb :players
 end
 
 get '/matches' do
-
+	erb :matches
 end
 
 get '/rounds' do
-
+	erb :rounds
 end
